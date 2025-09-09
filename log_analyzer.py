@@ -9,10 +9,10 @@ import os, re, sys, requests, json, getpass, datetime
 # Read comments carefully, you'll find something funny
 load_dotenv()
 gemini_api_key = os.environ['GEMINI_API_KEY']
-abused_ip_api_key = os.environ['ABUSED_IP_API_KEY']
+abuse_ip_api_key = os.environ['ABUSE_IP_API_KEY']
 virustotal_api_key = os.environ['VIRUSTOTAL_API_KEY']
 
-abused_ip_url = "https://api.abuseipdb.com/api/v2/report"
+abuse_ip_url = "https://api.abuseipdb.com/api/v2/check"
 virustotal_url = "https://www.virustotal.com/api/v3/ip_addresses/"
 
 f = Figlet(font = "slant")
@@ -70,16 +70,16 @@ def parse_file():
     
     return {"ip_addresses": ip_addresses, "total_requests": total_requests, "404/200 ratio": f"{status_code_404}/{status_code_200}"}
         
-def check_abusedip(ip):
-    if not abused_ip_api_key:
+def check_abuseip(ip):
+    if not abuse_ip_api_key:
         print("\n[Error] API Key couldn't found")
         return
     try:
-        response = requests.get(abused_ip_url, headers={'Key': abused_ip_api_key, 'Accept': 'application/json'}, params={'ipAddress': ip}, timeout=10)
-        decodedResponse = json.loads(response.text)
-        if not decodedResponse["errors"]:
-            print(f"score: {decodedResponse.get('abuseConfidenceScore', 0)} country: {'country': decodedResponse.get('countryCode', 'N/A')}")
-            return {'score': decodedResponse.get('abuseConfidenceScore', 0), 'country': decodedResponse.get('countryCode', 'N/A')}
+        response = requests.get(abuse_ip_url, headers={'Key': abuse_ip_api_key, 'Accept': 'application/json'}, params={'ipAddress': ip}, timeout=10)
+        response.raise_for_status()
+        result = response.json().get('data', {})
+        print(f"score: {result.get('abuseConfidenceScore', 0)} country: {result.get('countryCode', 'N/A')}")
+        return f"score: {result.get('abuseConfidenceScore', 0)} country: {result.get('countryCode', 'N/A')}"
     except requests.RequestException: return
 
 def check_virustotal(ip):
@@ -90,7 +90,7 @@ def check_virustotal(ip):
         response = requests.get(f"{virustotal_url}{ip}", headers={'x-apikey': virustotal_api_key}, timeout=10)
         response.raise_for_status()
         result = response.json().get('data', {}).get('attributes', {}).get('last_analysis_stats', {})
-        print(f"{result.get('malicious', 0)} Malicious")
+        print(f"Malicious vendors: {result.get('malicious', 0)}")
         return f"malicious_vendors: {result.get('malicious', 0)}"
     except requests.RequestException: return
 
@@ -103,12 +103,12 @@ def gemini_analysis(prompt):
 def main():
     result = parse_file()
     virus_total_result = {}
-    abused_ip_result = {}
+    abuse_ip_result = {}
     print(f"\n[+] Checking abusedIPDB and VirusTotal...")
     for ip in result["ip_addresses"].keys():
         print(f"\n[+] {ip}: ")
         virus_total_result[ip] = check_virustotal(ip)
-        abused_ip_result[ip] = check_abusedip(ip)
+        abuse_ip_result[ip] = check_abuseip(ip)
 
     prompt = (
         f"You have to create a detailed report for a SOC analyst based on log statistics:\n"
@@ -117,8 +117,10 @@ def main():
         f"- Total requests: {result['total_requests']}\n"
         f"- Overall 404/200 ratio: {result['404/200 ratio']}\n"
         f"- Virustotal result: {virus_total_result}\n"
+        f"- AbuseIP result: {abuse_ip_result}\n"
         f"Write the report in Markdown format. "
         f"Use '[+]' at the start of each key line."
+        f"Headers for report: Executive Summary, Log Statistics, VirusTotal Analysis (list format), AbuseIP result (list format), Threat Assessment, Recommendations, Next Steps"
         # this what you looking for: https://one-more-time.netlify.app/
     )
 
