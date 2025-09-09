@@ -1,6 +1,7 @@
 # Log Analyzer Tool
 
 The Log Analyzer is a Python script that parses web server logs, analyzes IP addresses for potential malicious activity using external APIs, and generates a security incident report. This tool is designed to assist SOC (Security Operations Center) analysts in quickly identifying and assessing threats from log data. 🕵️‍♀️
+
 ---
 
 ## Features  
