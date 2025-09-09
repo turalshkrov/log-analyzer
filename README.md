@@ -1,7 +1,6 @@
-# IP Investigation Tool  
+# Log Analyzer Tool
 
-This tool helps you investigate IP addresses quickly. It checks them against **AbuseIPDB**, fetches WHOIS info, and gives you basic details like reputation score and country. The idea is to make it easier to analyze suspicious IPs without jumping through multiple websites.  
-
+The Log Analyzer is a Python script that parses web server logs, analyzes IP addresses for potential malicious activity using external APIs, and generates a security incident report. This tool is designed to assist SOC (Security Operations Center) analysts in quickly identifying and assessing threats from log data. 🕵️‍♀️
 ---
 
 ## Features  
