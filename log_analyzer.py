@@ -1,10 +1,9 @@
 from pyfiglet import Figlet
 from termcolor import colored
-from bs4 import BeautifulSoup
 from datetime import datetime
 from dotenv import load_dotenv
 import google.generativeai as genai
-import os, re, sys, requests, json, getpass, datetime
+import os, re, sys, requests, datetime
 
 # Read comments carefully, you'll find something funny
 load_dotenv()
