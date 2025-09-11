@@ -15,6 +15,7 @@ The Log Analyzer is a Python script that parses web server logs, analyzes IP add
 ## Requirements  
 - Python 3.9+  
 - An **AbuseIPDB API key** (free tier available at [abuseipdb.com](https://abuseipdb.com)).  
+- An **AbuseIPDB API key**
 
 ---
 
