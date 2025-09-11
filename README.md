@@ -24,7 +24,7 @@ The Log Analyzer is a Python script that parses web server logs, analyzes IP add
 
 ```bash
 git clone https://github.com/turalshkrov/log-analyzer.git
-cd ip-investigator
+cd log-analyzer
 ```
 ## Install dependencies
 ```bash
