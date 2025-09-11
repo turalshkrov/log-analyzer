@@ -46,7 +46,7 @@ VIRUSTOTAL_API_KEY="YOUR_VIRUSTOTAL_API_KEY"
 To run the tool, execute the script from your terminal and provide the path to your log file as a command-line argument.
 
 ```bash
-python main.py <path_to_log_file>
+python log-analyzer.py <path_to_log_file>
 ```
 
 What Happens Next?
