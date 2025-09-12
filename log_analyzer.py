@@ -125,7 +125,7 @@ def main():
 
     gemini_result = gemini_analysis(prompt=prompt)
     print(f"\n{gemini_result}")
-    report_path = "reports/soc_report.md"
+    report_path = "soc_report.md"
     with open(report_path, "w", encoding="utf-8") as f:
         f.write(gemini_result)
 
